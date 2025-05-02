@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ContactManagement.Models.Domain.Contact>
+
+@{
+	ViewData["Title"] = "Favorite Contacts";
+}
+
+<div class="container">
+	<h1>Favorite Contacts</h1>
+
+	<div class="row mb-3">
+		<div class="col-md-6">
+			<form asp-action="GetFavorites" method="get" class="form-inline">
+				<input class="form-control mr-sm-2" type="search" placeholder="Search Email ID" aria-label="Search" name="searchEmail" value="@ViewData["CurrentFilter"]">
+				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+			</form>
+		</div>
+		<div class="col-md-6 text-right">
+			<a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Back to Contacts</a>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<h2>Favorite Contact Directory</h2>
+			@if (Model != null && Model.Any())
+			{
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th></th>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Email</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<td>
+									<a class="favorite-toggle" data-id="@item.Id" data-is-favorite="@item.IsFavorite" style="cursor: pointer;">
+										@if (item.IsFavorite)
+										{
+											<span class="text-warning">&#9733;</span>
+										}
+										else
+										{
+											<span class="text-muted">&#9734;</span>
+										}
+									</a>
+								</td>
+								<td>@item.FirstName</td>
+								<td>@item.LastName</td>
+								<td>@item.Email</td>
+								<td>
+									<a asp-action="Edit" asp-controller="Contact" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a> |
+									<a asp-action="Delete" asp-controller="Contact" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			}
+			else
+			{
+				<p>No favorite contacts yet.</p>
+			}
+		</div>
+		<div class="col-md-6">
+		</div>
+	</div>
+</div>
